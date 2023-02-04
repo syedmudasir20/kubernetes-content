@@ -1,0 +1,5 @@
+10.0.0.4 kube-master
+10.0.0.4 my.kubernetes.example
+10.0.0.5 kube-node1
+10.0.0.6 kube-node2
+127.0.0.1 localhost

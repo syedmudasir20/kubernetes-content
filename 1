@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: first-pod
+  labels:
+    app: hello-world-app
+spec:
+  containers:
+  - name: first
+    image: "gcr.io/google-samples/hello-app:2.0"
+  tolerations:
+  - key: "db"
+    operator: "Equal"
+    value: "applicaiions"
+    effect: "NoSchedule"

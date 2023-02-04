@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: my.kubernetes.example
+    http:
+      paths:
+      - path: /webapp1
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp1-svc
+            port:
+              number: 80
+      - path: /webapp2
+        pathType: Prefix
+        backend:
+          service:
+            name: webapp2-svc
+            port:
+              number: 80
+  defaultBackend:
+          service:
+            name: webapp3-svc
+            port:
+              number: 80

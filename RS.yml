@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-desired-app-new
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      anmol: web-server
+  template:
+    metadata:
+      labels:
+        anmol: web-server
+    spec:
+      containers:
+      - name: web-server
+        image: nginx:1.20
