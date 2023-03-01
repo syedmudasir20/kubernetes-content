@@ -13,7 +13,7 @@ spec:
       
   initContainers:
   - name: bootsrap-cont
-    image: busybos
+    image: busybox
    
     volumeMounts:
     - name: workdir
