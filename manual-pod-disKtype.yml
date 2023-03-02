@@ -6,5 +6,5 @@ spec:
   containers:
   - name: cnt
     image: nginx
-    nodeSelector:
+  nodeSelector:
     disktype: ssd
