@@ -8,4 +8,4 @@ spec:
   - name: pod-1
     image: nginx
   nodeSelector:
-    vip: "maybe
+    vip: "maybe"
