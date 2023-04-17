@@ -13,9 +13,9 @@ spec:
         app: nginx
     spec:
       tolerations:
-      - key: "myKey"
+      - key: "app-db"
         operator: "Equal"
-        value: "myValue"
+        value: "azure-file-storage"
         effect: "NoSchedule"
       containers:
       - name: web-container
