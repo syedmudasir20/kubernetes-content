@@ -9,7 +9,7 @@ spec:
     
     volumeMounts:
     - mountPath: /usr/share/nginx/html
-      name:nfs-volume
+      name: nfs-volume
   volumes:
   - name: nfs-volume
     persistentVolumeClaim:
