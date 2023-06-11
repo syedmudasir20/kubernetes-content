@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: anti-nginx
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: anti-nginx
@@ -16,8 +16,8 @@ spec:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
           - topologyKey: kubernetes.io/hostname
-          labelSelector:
-            matchExpressions:
+            labelSelector:
+              matchExpressions:
               - key: app
                 operator: In
                 values:
