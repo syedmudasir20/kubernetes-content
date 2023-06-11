@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: electron
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: electron
+  template:
+    metadata:
+      labels:
+        app: electron
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname 
+              labelSelector:                      
+                matchExpressions:  
+                - key: app
+                  operator: In
+                  values:
+                  - electron       
+      containers:
+      - name: nginx
+        image: nginx:1.20
+        ports:
+        - containerPort: 80
