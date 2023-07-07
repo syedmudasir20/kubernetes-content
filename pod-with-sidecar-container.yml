@@ -4,14 +4,14 @@ metadata:
   name: sidecar-container-demo
 spec:
   containers:
-    - name: main-app
+    - name: main-container
       image: nginx
       volumeMounts:
         - name: var-logs
           mountPath: /usr/share/nginx/html
     - name: sidecar-container
       image: alpine
-      command: ["bin/bash","-c","while true; do echo $(date -u) 'Hi , I am from sidecar container' >> /var/log/index.html; sleep 5; done"]
+      command: ["/bin/sh","-c","while true; do echo $(date -u) 'Hi , I am from sidecar container' >> /var/log/index.html; sleep 5; done"]
       
       volumeMounts:
       - name: var-logs
