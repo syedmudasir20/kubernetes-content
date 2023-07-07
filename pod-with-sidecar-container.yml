@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-container-demo
+spec:
+  containers:
+    - name: main-app
+      image: nginx
+      volumeMounts:
+        - name: var-logs
+          mountPath: /usr/share/nginx/html
+    - name: sidecar-container
+      image: alpine
+      command: ["bin/bash","-c","while true; do echo $(date -u) 'Hi , I am from sidecar container' >> /var/log/index.html; sleep 5; done"]
+      
+      volumeMounts:
+      - name: var-logs
+        mountPath: /var/log
+  volumes:
+  - name: var-logs
+    emptyDir: {}
