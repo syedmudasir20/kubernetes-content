@@ -16,6 +16,14 @@ spec:
       - name: mariadb
         image: mariadb:10.4
 
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-root-password
+              key: password
+              
+
         envFrom:
         - secretRef:
             name: mariadb-user-creds
