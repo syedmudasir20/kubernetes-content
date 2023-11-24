@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: secret-pod
+  name: secret-pod
+spec:
+  containers:
+  - image: nginx
+    name: secret-pod
+    
+    env:
+      - name: PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: secret-test2
+            key: password
+
+    volumeMounts:
+    - name: foo
+      mountPath: "/etc/secret1"
+      readOnly: true
+
+  volumes:
+  - name: foo
+    secret:
+      secretName: secret-test1
