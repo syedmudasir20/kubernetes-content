@@ -1,6 +1,6 @@
 services:
   ghost:
-    image: ghost:1-alpine
+    image: ghost:latest
     container_name: ghost-blog
     restart: always
     ports:
@@ -17,7 +17,7 @@ services:
       - mysql
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8  
     container_name: ghost-db
     restart: always
     environment:
