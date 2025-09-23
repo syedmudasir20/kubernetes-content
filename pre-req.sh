@@ -13,6 +13,7 @@ echo
 echo "Disable swap until next reboot"
 echo
 sudo swapoff -a
+sudo sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 
 echo "Updating the local node, please stand-by"
 sudo apt-get update && sudo apt-get upgrade -y
@@ -55,31 +56,34 @@ sleep 2
 echo "Install and configure containerd"
 sleep 2
 
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+install -m 0755 -d /etc/apt/keyringscurl gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+chmod a+r /etc/apt/keyrings/docker.asc
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
 
 sudo apt-get update &&  sudo apt-get install containerd.io
-sudo containerd config default | sudo tee /etc/containerd/config.toml
-sudo systemctl daemon-reload
-sudo systemctl enable --now containerd
-sudo systemctl restart containerd
+mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sed -i '/SystemdCgroup/ s/false/true/' /etc/containerd/config.toml
+systemctl restart containerd
+systemctl enable --now containerd
+
+
 
 echo
 echo "Install kubeadm, kubelet, and kubectl"
 sleep 2
 
-sudo sh -c "echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list"
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
+sudo apt-get update -y
 
-sudo sh -c "curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg"
-
-sudo apt-get update
-
-sudo apt-get install -y kubelet=1.30.3-1.1 kubeadm=1.30.3-1.1 kubectl=1.30.3-1.1 --allow-change-held-packages
+apt-get install -y kubelet=1.33.0-1.1 kubeadm=1.33.0-1.1 kubectl=1.33.0-1.1 --allow-change-held-packages
 
 
 sudo apt-mark hold kubelet kubeadm kubectl
