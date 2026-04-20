@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  containers:
+
+  # Main Application
+  - name: web-server
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+  # Sidecar for Health Check
+  - name: health-checker
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          wget -qO- http://localhost:80 >/dev/null && echo "Web Server UP" || echo "Web Server DOWN";
+          sleep 10;
+        done
+
+  # Sidecar for Monitoring
+  - name: monitor
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          date;
+          ps;
+          sleep 15;
+        done
