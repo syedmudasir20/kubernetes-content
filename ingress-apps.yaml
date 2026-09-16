@@ -1,0 +1,117 @@
+cat > ingress-apps.yaml <<'EOF'
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blue-content
+data:
+  index.html: |
+    <html><body><h1>BLUE BACKEND</h1><p>Host routing reached blue-web.</p></body></html>
+  blue.html: |
+    <html><body><h1>BLUE PATH</h1><p>/blue/ reached blue-web.</p></body></html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue-web
+  template:
+    metadata:
+      labels:
+        app: blue-web
+    spec:
+      containers:
+      - name: nginx
+        image: registry.access.redhat.com/ubi9/nginx-124:latest
+        command: ["nginx"]
+        args: ["-g", "daemon off;"]
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: content
+          mountPath: /opt/app-root/src
+          readOnly: true
+      volumes:
+      - name: content
+        configMap:
+          name: blue-content
+          items:
+          - key: index.html
+            path: index.html
+          - key: blue.html
+            path: blue/index.html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blue-web
+spec:
+  selector:
+    app: blue-web
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: green-content
+data:
+  index.html: |
+    <html><body><h1>GREEN BACKEND</h1><p>Host routing reached green-web.</p></body></html>
+  green.html: |
+    <html><body><h1>GREEN PATH</h1><p>/green/ reached green-web.</p></body></html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: green-web
+  template:
+    metadata:
+      labels:
+        app: green-web
+    spec:
+      containers:
+      - name: nginx
+        image: registry.access.redhat.com/ubi9/nginx-124:latest
+        command: ["nginx"]
+        args: ["-g", "daemon off;"]
+        ports:
+        - name: http
+          containerPort: 8080
+        volumeMounts:
+        - name: content
+          mountPath: /opt/app-root/src
+          readOnly: true
+      volumes:
+      - name: content
+        configMap:
+          name: green-content
+          items:
+          - key: index.html
+            path: index.html
+          - key: green.html
+            path: green/index.html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: green-web
+spec:
+  selector:
+    app: green-web
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+EOF
