@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa-demo
+  template:
+    metadata:
+      labels:
+        app: hpa-demo
+    spec:
+      containers:
+      - name: app
+        image: registry.access.redhat.com/ubi9/python-312-minimal
+        command: ["python3", "-c"]
+        args:
+        - |
+          from http.server import BaseHTTPRequestHandler, HTTPServer
+          import math
+
+          class Handler(BaseHTTPRequestHandler):
+              def do_GET(self):
+                  x = 0.0001
+                  for _ in range(1000000):
+                      x += math.sqrt(x)
+                  self.send_response(200)
+                  self.end_headers()
+                  self.wfile.write(b"OK\n")
+
+              def log_message(self, format, *args):
+                  pass
+
+          HTTPServer(("0.0.0.0", 8080), Handler).serve_forever()
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-demo-svc
+spec:
+  selector:
+    app: hpa-demo
+  ports:
+  - port: 8080
+    targetPort: 8080
