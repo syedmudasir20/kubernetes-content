@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: web-app-blue
+ labels:
+   app: blue-webserver
+spec:
+ replicas: 4
+ selector:
+   matchLabels:
+     app: webserver
+     ver: blue
+ template:
+   metadata:
+     labels:
+       app: webserver
+       ver: blue
+   spec:
+     containers:
+     - name: webserver-container
+       image: eyesoncloud/web-app:v1

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: critical-app
+  labels:
+    app: critical-application
+spec:
+  selector:
+    matchLabels:
+      app: critical-application
+  replicas: 6
+  template:
+    metadata:
+      labels:
+        app: critical-application
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1Gi
+          limits:
+            cpu: 1000m
+            memory: 1Gi

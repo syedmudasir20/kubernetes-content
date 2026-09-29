@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-nfs-deployment
+  labels:
+    app: storage-nfs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: storage-nfs
+  template:
+    metadata:
+      labels:
+        app: storage-nfs
+    spec:
+      containers:
+        - image: mcr.microsoft.com/oss/nginx/nginx:1.19.5
+          name: storage-nfs
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "set -euo pipefail; while true; do echo $(date) >> /mnt/nfs/outfile; sleep 1; done"
+          volumeMounts:
+            - name: persistent-storage
+              mountPath: "/mnt/nfs"
+              readOnly: false
+      volumes:
+        - name: persistent-storage
+          persistentVolumeClaim:
+            claimName: pvc-nfs-dynamic
+

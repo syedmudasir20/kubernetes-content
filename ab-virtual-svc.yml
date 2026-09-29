@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: my-app
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - ab-gateway
+  http:
+  - match:
+      - headers:
+          user-agent:
+            regex: ".*Firefox.*"
+    route:
+      - destination:
+          host: my-app-v1
+          subset: v1
+  - match:
+      - headers:
+          user-agent:
+            regex: ".*Chrome.*"
+    route:
+      - destination:
+          host: my-app-v2
+          subset: v2
+  - route:
+      - destination:
+          host: my-app-v1
+          subset: default

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webappdeployment
+  labels:
+    app: logging-app
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: logging-app
+      version: v1
+  template:
+    metadata:
+      name: webapppod
+      labels:
+        app: logging-app
+        version: v1
+    spec:
+      containers:
+        - name: sbwebappcontainer
+          image: eyesoncloud/sb-log-app:v1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: log-volume
+              mountPath: /var/log/app
+        - name: fluentd-sidecar
+          image: quay.io/fluentd_elasticsearch/fluentd:v2.7.0
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: log-volume
+              mountPath: /fluentd/log
+            - name: fluentd-config
+              mountPath: /fluentd/etc
+          env:
+            - name: FLUENTD_CONF
+              value: fluentd.conf
+      volumes:
+        - name: log-volume
+          emptyDir: {}
+        - name: fluentd-config
+          configMap:
+            name: fluentd-configmap

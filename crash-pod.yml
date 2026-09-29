@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crash-pod
+spec:
+  containers:
+    - name: crash-container
+      image: python:3.9
+      command: ["python", "-c", "print('Starting...'); 1/0"]  # This will intentionally crash (divide by zero)

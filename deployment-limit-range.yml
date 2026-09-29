@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  limit-test
+  namespace: eoc-namespace
+  labels:
+    app:  limit-label
+spec:
+  selector:
+    matchLabels:
+      app: limit-label
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: limit-label
+    spec:
+      containers:
+      - name:  nginx-deploy
+        image:  nginx:latest

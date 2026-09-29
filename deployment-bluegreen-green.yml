@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: web-app-green
+ labels:
+   app: green-webserver
+spec:
+ replicas: 4
+ selector:
+   matchLabels:
+     app: webserver
+     ver: green
+ template:
+   metadata:
+     labels:
+       app: webserver
+       ver: green
+   spec:
+     containers:
+     - name: webserver-container
+       image: eyesoncloud/web-app:v2

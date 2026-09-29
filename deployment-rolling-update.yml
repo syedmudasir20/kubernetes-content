@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rolling-update-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: rolling-update
+  template:
+    metadata:
+      labels:
+        app: rolling-update
+    spec:
+      containers:
+      - name: hello-image
+        image: gcr.io/google-samples/hello-app:1.0
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-v1
+  labels:
+    version: v1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+        version: v1
+    spec:
+      containers:
+      - name: nodejs
+        image: eyesoncloud/test-prod:latest
+        ports:
+        - containerPort: 8080

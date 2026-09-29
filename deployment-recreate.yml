@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recreate-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recreate
+  template:
+    metadata:
+      labels:
+        app: recreate
+    spec:
+      containers:
+      - name: hello-app
+        image: gcr.io/google-samples/hello-app:1.0
+        ports:
+        - containerPort: 8080

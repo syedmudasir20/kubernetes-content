@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefox-app-v1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-app
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: v1
+    spec:
+      containers:
+      - name: my-app
+        image: eyesoncloud/webapp:v1
+        ports:
+        - containerPort: 80
