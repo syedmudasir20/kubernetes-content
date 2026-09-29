@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: privileged-container
+spec:
+  containers:
+  - name: privileged-container
+    image: ubuntu:latest
+    command: ["/bin/bash", "-c", "while true; do echo hello; sleep 10; done"]
+    securityContext:
+      capabilities:
+        add: ["SYS_TIME"]

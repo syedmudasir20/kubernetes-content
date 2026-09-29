@@ -1,0 +1,21 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: canary-route
+  namespace: default
+spec:
+  parentRefs:
+  - name: kong
+    namespace: default
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: canary-v1-service
+      port: 80
+      weight: 100
+    - name: canary-v2-service
+      port: 80
+      weight: 0

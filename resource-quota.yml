@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: resource-quota-demo
+  namespace: eoc-namespace
+spec:
+  hard:
+    pods: "1"
+    requests.cpu: "2"
+    requests.memory: "5Gi"
+    limits.cpu: "4"
+    limits.memory: "10Gi"

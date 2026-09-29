@@ -1,0 +1,16 @@
+ apiVersion: v1
+ kind: Pod
+ metadata:
+   name: pending-crash-loop-pod
+ spec:
+   containers:
+   - name: pending-crash-loop-container
+     image: busybox:latest
+     command:
+       - "/bin/sh"
+       - "-c"
+       - "while true; do echo 'Hello, CrashLoop!'; sleep 5; done"
+     resources:
+       requests:
+         memory: "100Gi"
+         cpu: "100m"

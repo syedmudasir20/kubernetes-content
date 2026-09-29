@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-fixed-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest  # Use the default command of nginx

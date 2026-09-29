@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-without-securitycontext
+  labels:
+    app: security-context
+spec:
+  volumes:
+  - name: demo-volume
+    emptyDir: {}
+  containers:
+  - name: regular-pod-demo
+    image: redhat/ubi8
+    command: [ "tail", "-f", "/dev/null" ]
+    volumeMounts:
+    - name: demo-volume
+      mountPath: /data/demo

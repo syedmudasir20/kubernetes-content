@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: read-only-root-fs-pod
+  labels:
+    app: security-context
+spec:
+  containers:
+  - name: read-only-root-fs-demo
+    image: redhat/ubi8         
+    command: [ "tail", "-f", "/dev/null" ]  
+    securityContext:
+      readOnlyRootFilesystem: true   # Enforces the root filesystem to be read-only

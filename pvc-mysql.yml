@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany  # Must match the access mode of the PV
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""

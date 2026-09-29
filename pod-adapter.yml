@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: adapter-app
+  name: adapter-pod
+spec:
+  containers:
+  - image: eyesoncloud/json-server
+    name: car-service
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: db
+      mountPath: /data/
+  volumes:
+  - name: db
+    configMap:
+      name: carsdb

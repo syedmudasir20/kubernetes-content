@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-restricted-privileges
+  labels:
+    app: security-context
+spec:
+  volumes:
+  - name: demo-volume
+    emptyDir: {}
+  containers:
+  - name: non-privileged-demo
+    image: redhat/ubi8
+    command: [ "tail", "-f", "/dev/null" ]
+    volumeMounts:
+    - name: demo-volume
+      mountPath: /data/demo
+    securityContext:
+      privileged: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL

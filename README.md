@@ -1,1 +1,1 @@
-# kubernetes-content
+# kubernetes supporting YAML files

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seccomp-profile
+  namespace: kube-system
+data:
+  my-profile.json: |
+    {
+      "defaultAction": "SCMP_ACT_ALLOW",
+      "syscalls": [
+        {
+          "name": "chmod",
+          "action": "SCMP_ACT_ERRNO"
+        }
+      ]
+    }    
