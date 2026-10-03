@@ -6,12 +6,12 @@ spec:
   replicas: 4
   selector:
     matchLabels:
-      tier: web-server
+      app: frontend
   template:
     metadata:
       labels:
-        tier: web-server
+        app: frontend
     spec:
       containers:
         - name: web-server-container
-          image: eyesoncloud/web-app:v1
+          image: mudasir20/prod_frontend:v1
