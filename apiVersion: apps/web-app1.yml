@@ -14,4 +14,4 @@ spec:
     spec:
       containers:
         - name: web-server-container
-          image: mudasir20/prod_frontend:v1
+          image: mudasir20/prodapp_frontend:blue-v1
